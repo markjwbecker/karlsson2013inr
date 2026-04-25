@@ -1,7 +1,3 @@
 exportPattern("^[[:alpha:]]+")
 export(setup)
 S3method(setup, bvar)
-export(summary.bvar)
-S3method(summary, bvar)
-export(print.summary.bvar)
-S3method(print, summary.bvar)
