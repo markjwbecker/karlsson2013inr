@@ -43,7 +43,9 @@ y_t'&=\sum_{i=1}^p y_{t-i}' A_i + x_t' C + u_t'\\
 \end{aligned}
 $$
 
-where $x_t$ is a vector of $d$ deterministic variables, $z_t' = \begin{pmatrix}y_{t-1}',\dots,y_{t-p}',x_t'\end{pmatrix}$ is a $k=mp + d$ dimensional vector and $\Gamma= \begin{pmatrix}A_1',\dots,A_p',C'\end{pmatrix}'$ is a $k \times m$ matrix. We have normally distributed errors $u_t \sim N(0, \Psi)$.
+where $x_t$ is a vector of $d$ deterministic variables, $z_t' = \begin{pmatrix}y_{t-1}',\dots,y_{t-p}',x_t'\end{pmatrix}$
+is a $k=mp + d$ dimensional vector and $\Gamma= \begin{pmatrix}A_1',\dots,A_p',C'\end{pmatrix}'$ is a $k \times m$ matrix.
+We have normally distributed errors $u_t \sim N(0, \Psi)$.
 
 ## Algorithm 4 (steady-state BVAR)
 
@@ -75,6 +77,7 @@ $$
 \pi \begin{pmatrix} \Gamma_d, \Lambda, \Psi\end{pmatrix} = \pi \begin{pmatrix} \Gamma_d \end{pmatrix} \pi \begin{pmatrix} \Lambda \end{pmatrix} \pi \begin{pmatrix} \Psi \end{pmatrix}
 $$
 
+
 with $\pi \begin{pmatrix} \Gamma_d \end{pmatrix}$ and $\pi \begin{pmatrix} \Lambda \end{pmatrix}$ normal,
 
 
@@ -86,8 +89,9 @@ $$
 $$
 
 
-and a Jeffreys' prior for $\Psi$. Alternatively a proper inverse Wishart, $\Psi \sim iW(\underline{S}, \underline{v})$, for $\Psi$ can be used. Here $\pi \begin{pmatrix} \Gamma_d \end{pmatrix}$ is based on the Minnesota prior with overall tightness $\pi_1$, cross-equation tightness $\pi_2$ and lag decay rate $\pi_3$.
+and a Jeffreys' prior for $\Psi$. Alternatively a proper inverse Wishart, $\Psi \sim iW(\underline{S}, \underline{v})$, for $\Psi$ can be used.
 
+Here $\pi \begin{pmatrix} \Gamma_d \end{pmatrix}$ is based on the Minnesota prior with overall tightness $\pi_1$, cross-equation tightness $\pi_2$ and lag decay rate $\pi_3$.
 
 
 ```{r, fig.width=10, fig.height=8,eval=FALSE}

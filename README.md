@@ -85,7 +85,9 @@ $$
 
 and a Jeffreys’ prior for $\Psi$. Alternatively a proper inverse
 Wishart, $\Psi \sim iW(\underline{S}, \underline{v})$, for $\Psi$ can be
-used. Here $\pi \begin{pmatrix} \Gamma_d \end{pmatrix}$ is based on the
+used.
+
+Here $\pi \begin{pmatrix} \Gamma_d \end{pmatrix}$ is based on the
 Minnesota prior with overall tightness $\pi_1$, cross-equation tightness
 $\pi_2$ and lag decay rate $\pi_3$.
 
