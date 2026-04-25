@@ -41,13 +41,13 @@ x_t
 $$
 
 is a vector of $d$ deterministic variables (constant and or dummy/time
-trend)
+trend),
 
 $$
 z_t' = \begin{pmatrix}y_{t-1}',\dots,y_{t-p}',x_t'\end{pmatrix}
 $$
 
-is a $k=mp + d$ dimensional vector and
+is a $k=mp + d$ dimensional vector, and
 
 $$
 \Gamma= \begin{pmatrix}A_1',\dots,A_p',C'\end{pmatrix}'
@@ -58,7 +58,7 @@ $u_t \sim N(0, \Psi)$.
 
 ## Algorithm 4 (steady-state BVAR)
 
-Let $A(L)= I-A_1'L-\ldots-A_p'L^p$ we can then write a stationary VAR as
+Let $A(L)= I-A_1'L-\ldots-A_p'L^p$ we can then write the BVAR as
 
 $$
 A(L)y_t = C'x_t +u_t
