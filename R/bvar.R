@@ -1,4 +1,4 @@
-bvar <- function(data = NULL, setup = NULL, priors = NULL, fit = list(stan = NULL, gibbs = NULL), predict=list()) {
+bvar <- function(data = NULL, setup = NULL, priors = NULL, fit = NULL, predict=list()) {
   
   obj <- list(
     data      = data,

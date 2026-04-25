@@ -1,64 +1,65 @@
 setup <- function(x, ...) UseMethod("setup")
 
-setup.bvar <- function(x, p, deterministic=c("constant", "constant_and_dummy", "constant_and_trend"), dummy=NULL) {
+setup.bvar <- function(x, p, deterministic=c("constant", "constant_and_dummy", "constant_and_trend"), dummy=NULL, trend=NULL) {
   
   yt <- x$data
   N = nrow(yt)-p
-  k = ncol(yt)
+  m = ncol(yt)
   
   deterministic <- match.arg(deterministic)
   
   if (deterministic == "constant") {
-    dt <- cbind(rep(1, nrow(yt)))
-    q <- 1
+    xt <- cbind(rep(1, nrow(yt)))
+    d <- 1
   } else if (deterministic == "constant_and_dummy") {
-    dt <- cbind(rep(1, nrow(yt)), dummy)
-    q <- 2
+    xt <- cbind(rep(1, nrow(yt)), dummy)
+    d <- 2
   } else {
     trend <- 1:nrow(yt)
-    dt <- cbind(rep(1, nrow(yt)), trend)
-    q <- 2
+    xt <- cbind(rep(1, nrow(yt)), trend)
+    d <- 2
   }
   
   Y <- yt[-c(1:p), ]
-  W <- embed(yt, dimension = p+1)[, -(1:k)]
-  X <- dt[-c(1:p), ,drop=F]
-  Q <- embed(dt, dimension = p+1)[, -(1:q), drop=F]
-  
+  W <- embed(yt, dimension = p+1)[, -(1:m)]
+  X <- xt[-c(1:p), ,drop=F]
+  Q <- embed(xt, dimension = p+1)[, -(1:d), drop=F]
   Z <- cbind(W,X)
-  beta_hat = solve(crossprod(Z),crossprod(Z,Y))
-  U = Y-Z%*%beta_hat
-  Sigma_u_OLS <- crossprod(U)/(N-k*p-q)
   
-  if (q == 1) {
-    C_hat <- beta_hat[(k*p+1):(k*p+q),]
+  Gamma_OLS = solve(crossprod(Z),crossprod(Z,Y))
+  U = Y-Z%*%Gamma_OLS
+  Psi_OLS <- crossprod(U)/(N-m*p-d)
+  
+  if (d == 1) {
+    C_hat <- Gamma_OLS[(m*p+1):(m*p+d),]
   } else {
-    C_hat <- t(beta_hat[(k*p+1):(k*p+q),])
+    C_hat <- t(Gamma_OLS[(m*p+1):(m*p+d),])
   }
   A <- vector("list", p)
   for (i in 1:p) {
-    rows_idx <- ((i - 1) * k + 1):(i * k)
-    A[[i]] <- matrix(t(beta_hat[rows_idx, ]), nrow = k, ncol = k)
+    rows_idx <- ((i - 1) * m + 1):(i * m)
+    A[[i]] <- matrix(t(Gamma_OLS[rows_idx, ]), m, m)
   }
-  A_L <- diag(k)
+  A_L <- diag(m)
   for (i in 1:p) {
     A_L <- A_L - A[[i]]
   }
-  Psi_OLS <- solve(A_L, C_hat)
-  beta_OLS = beta_hat[1:(k*p),]
+  Lambda_OLS <- solve(A_L, C_hat)
+  Gamma_d_OLS = Gamma_OLS[1:(m*p),]
   x$setup <- list(N=N,
-                  k=k,
+                  m=m,
                   p=p,
                   Y=Y,
                   X=X,
                   W=W,
                   Q=Q,
-                  q=q,
+                  d=d,
                   dummy=dummy,
-                  beta_OLS=beta_OLS,
-                  Sigma_u_OLS=Sigma_u_OLS,
+                  trend=trend,
+                  Gamma_OLS=Gamma_OLS,
+                  Gamma_d_OLS=Gamma_d_OLS,
+                  Lambda_OLS=Lambda_OLS,
                   Psi_OLS=Psi_OLS,
-                  dt=dt,
-                  D=X)
+                  xt=xt)
   return(x)
 }

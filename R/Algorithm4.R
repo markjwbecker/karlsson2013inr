@@ -1,9 +1,5 @@
-estimate_gibbs <- function(x, iter, warmup, H, d_pred, Jeffrey=FALSE){
-  #### Algorithm 4 from:
-  #### Karlsson, S. (2013). Forecasting with Bayesian Vector Autoregression.
-  #### In: Elliott, G. and Timmerman, A. (eds) Handbook of Economic Forecasting.
-  #### Elsevier B.V. Vol 2, Part B., pp. 791-897.
-  #### Beware that I follow Karlssons notation here
+Algorithm4 <- function(x, iter, warmup, H, x_pred, Jeffrey=FALSE){
+  #### Algorithm 4 (steady-state BVAR)
   setup <- x$setup
   priors <- x$priors
   Y <- setup$Y
@@ -11,21 +7,21 @@ estimate_gibbs <- function(x, iter, warmup, H, d_pred, Jeffrey=FALSE){
   W <- setup$W
   Q <- setup$Q
   N <- setup$N
-  k  <- setup$k
+  m  <- setup$m
   p  <- setup$p
-  q  <- setup$q
+  d  <- setup$d
   
-  Gamma_d_OLS <- setup$beta_OLS
-  Lambda_OLS <- setup$Psi_OLS
+  Gamma_d_OLS <- setup$Gamma_d_OLS
+  Lambda_OLS <- setup$Lambda_OLS
   
-  gamma_d_lbar <-  priors$theta_beta
-  Sigma_d_lbar <- priors$Omega_beta
-  lambda_lbar <- priors$theta_Psi
-  Sigma_lambda_lbar <- priors$Omega_Psi
+  gamma_d_lbar <-  priors$gamma_d_pr_mean
+  Sigma_d_lbar <- priors$gamma_d_pr_covmat
+  lambda_lbar <- priors$lambda_pr_mean
+  Sigma_lambda_lbar <- priors$lambda_pr_covmat
   
   if (isFALSE(Jeffrey)){
-    v_ = priors$m_0
-    S_ = priors$V_0
+    v_ = priors$v_
+    S_ = priors$S_
   }
   
   Psi <- vector(mode = "list", length = iter+1)
@@ -34,7 +30,7 @@ estimate_gibbs <- function(x, iter, warmup, H, d_pred, Jeffrey=FALSE){
   
   R <- iter-warmup
   Burnin <- warmup
-  forecasts_array <- array(NA, dim = c(H, k, R))
+  forecasts_array <- array(NA, dim = c(H, m, R))
   
   ############### START ###############
   
@@ -45,8 +41,8 @@ estimate_gibbs <- function(x, iter, warmup, H, d_pred, Jeffrey=FALSE){
   
   for (j in 2:(Burnin+R+1)){
     
-    Lambda = matrix(lambda[[j-1]],k,q)
-    Gamma_d = matrix(gamma_d[[j-1]],k*p,k)
+    Lambda = matrix(lambda[[j-1]],m,d)
+    Gamma_d = matrix(gamma_d[[j-1]],m*p,m)
     
     ############   1   ################
     ############ EQ 29 ################
@@ -71,15 +67,15 @@ estimate_gibbs <- function(x, iter, warmup, H, d_pred, Jeffrey=FALSE){
     
     ############   3   ################
     ############ EQ 31 ################
-    Gamma_d <- matrix(gamma_d[[j]],k*p,k)
+    Gamma_d <- matrix(gamma_d[[j]],m*p,m)
     A_list <- vector("list", p)
     for (i in 1:p) {
-      rows_idx <- ((i - 1) * k + 1):(i * k)
+      rows_idx <- ((i - 1) * m + 1):(i * m)
       A_list[[i]] <- t(Gamma_d[rows_idx, ])
     }
-    blocks <- list(diag(k * q))
+    blocks <- list(diag(m * d))
     for (i in 1:p) {
-      blocks[[i + 1]] <- diag(q) %x% t(A_list[[i]])
+      blocks[[i + 1]] <- diag(d) %x% t(A_list[[i]])
     }
     F_prime <- do.call(cbind, blocks)
     F <- t(F_prime)
@@ -95,26 +91,26 @@ estimate_gibbs <- function(x, iter, warmup, H, d_pred, Jeffrey=FALSE){
     ############   4   ################
     if (j > (Burnin+1)) {
     idx <- j - (Burnin + 1)
-    Lambda_j <- matrix(lambda[[j]], nrow = k, ncol = q)
-    Gamma_d_j <- matrix(gamma_d[[j]], nrow = k * p, ncol = k)
+    Lambda_j <- matrix(lambda[[j]], m, d)
+    Gamma_d_j <- matrix(gamma_d[[j]], m*p, m)
     Psi_j <- Psi[[j]]                                    
     
     A_j <- vector("list", p)
     for (i in 1:p) {
-      rows_idx <- ((i - 1) * k + 1):(i * k)
-      A_j[[i]] <- t(Gamma_d_j[rows_idx,])  # k x k
+      rows_idx <- ((i - 1) * m + 1):(i * m)
+      A_j[[i]] <- t(Gamma_d_j[rows_idx,])  # m x m
     }
     
-    Y_pred_mat <- matrix(NA, nrow = H, ncol = k)
+    Y_pred_mat <- matrix(NA, nrow = H, ncol = m)
     
     for (h in 1:H) {
       
-      u_t <- MASS::mvrnorm(1, rep(0, k), Psi_j)
-      ytilde_t <- d_pred[h, ] %*% t(Lambda_j)
+      u_t <- MASS::mvrnorm(1, rep(0, m), Psi_j)
+      ytilde_t <- x_pred[h, ] %*% t(Lambda_j)
       
       if (h > 1) {
         for (i in 1:min(h - 1, p)) {
-          term <- (Y_pred_mat[h - i,] - d_pred[h - i,] %*% t(Lambda_j)) %*% t(A_j[[i]])
+          term <- (Y_pred_mat[h - i,] - x_pred[h - i,] %*% t(Lambda_j)) %*% t(A_j[[i]])
           ytilde_t <- ytilde_t + term
         }
       }
@@ -143,20 +139,20 @@ estimate_gibbs <- function(x, iter, warmup, H, d_pred, Jeffrey=FALSE){
   
   ############### FINISH ###############
   
-  beta_draws <- array(unlist(gamma_d_keep), dim = c(k * p, k, n_keep))
-  Psi_draws <- array(unlist(lambda_keep), dim = c(k, q, n_keep))
-  Sigma_u_draws <- simplify2array(Psi_keep)
+  Gamma_d_draws <- array(unlist(gamma_d_keep), dim = c(m * p, m, n_keep))
+  Lambda_draws <- array(unlist(lambda_keep), dim = c(m, d, n_keep))
+  Psi_draws <- simplify2array(Psi_keep)
   
-  beta_posterior_mean <- apply(beta_draws, c(1, 2), mean)
+  Gamma_d_posterior_mean <- apply(Gamma_d_draws, c(1, 2), mean)
+  Lambda_posterior_mean <- apply(Lambda_draws, c(1, 2), mean)
   Psi_posterior_mean <- apply(Psi_draws, c(1, 2), mean)
-  Sigma_u_posterior_mean <- apply(Sigma_u_draws, c(1, 2), mean)
 
-  res <- list(beta_draws = beta_draws,
+  res <- list(Gamma_d_draws = Gamma_d_draws,
+              Lambda_draws = Lambda_draws,
               Psi_draws = Psi_draws,
-              Sigma_u_draws = Sigma_u_draws,
               fcst_draws = forecasts_array,
-              beta_posterior_mean = beta_posterior_mean,
-              Psi_posterior_mean = Psi_posterior_mean,
-              Sigma_u_posterior_mean = Sigma_u_posterior_mean)
+              Gamma_d_posterior_mean = Gamma_d_posterior_mean,
+              Lambda_posterior_mean = Lambda_posterior_mean,
+              Psi_posterior_mean = Psi_posterior_mean)
   return(res)
 }
