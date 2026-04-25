@@ -34,7 +34,14 @@ y_t'&=\sum_{i=1}^p y_{t-i}' A_i + x_t' C + u_t'\\
 \end{aligned}
 $$
 
-where $x_t$ is a vector of $d$ deterministic variables
+where
+
+$$
+x_t
+$$
+
+is a vector of $d$ deterministic variables (constant and or dummy/time
+trend)
 
 $$
 z_t' = \begin{pmatrix}y_{t-1}',\dots,y_{t-p}',x_t'\end{pmatrix}
