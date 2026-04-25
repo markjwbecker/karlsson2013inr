@@ -84,13 +84,13 @@ $$
 w_t'=(y_{t-1}',\dots,y_{t-p}')
 $$
 
-is a $kp$-dimensional vector of lagged endogenous variables,
+is a $mp$-dimensional vector of lagged endogenous variables,
 
 $$
-q_t'=(d_{t-1}',\dots,d_{t-p}')
+q_t'=(x_{t-1}',\dots,x_{t-p}')
 $$
 
-is a $qp$-dimensional vector of lagged deterministic (exogenous)
+is a $dp$-dimensional vector of lagged deterministic (exogenous)
 variables, and
 
 $$
@@ -103,8 +103,19 @@ $$
 \pi \begin{pmatrix} \Gamma_d, \Lambda, \Psi\end{pmatrix} = \pi \begin{pmatrix} \Gamma_d \end{pmatrix} \pi \begin{pmatrix} \Lambda \end{pmatrix} \pi \begin{pmatrix} \Psi \end{pmatrix}
 $$
 
-with $\pi \begin{pmatrix} \Gamma_d \end{pmatrix}$ and
-$\pi \begin{pmatrix} \Lambda \end{pmatrix}$ normal,
+with
+
+$$
+\pi \begin{pmatrix} \Gamma_d \end{pmatrix}
+$$
+
+and
+
+$$
+\pi \begin{pmatrix} \Lambda \end{pmatrix}
+$$
+
+normal,
 
 $$
 \begin{aligned}
@@ -117,9 +128,14 @@ and a Jeffreys’ prior for $\Psi$. Alternatively a proper inverse
 Wishart, $\Psi \sim iW(\underline{S}, \underline{v})$, for $\Psi$ can be
 used.
 
-Here $\pi \begin{pmatrix} \Gamma_d \end{pmatrix}$ is based on the
-Minnesota prior with overall tightness $\pi_1$, cross-equation tightness
-$\pi_2$ and lag decay rate $\pi_3$.
+Here
+
+$$
+\pi \begin{pmatrix} \Gamma_d \end{pmatrix}
+$$
+
+is based on the Minnesota prior with overall tightness $\pi_1$,
+cross-equation tightness $\pi_2$ and lag decay rate $\pi_3$.
 
 ``` r
 rm(list = ls())
