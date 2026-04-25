@@ -140,11 +140,18 @@ cross-equation tightness $\pi_2$ and lag decay rate $\pi_3$.
 ``` r
 rm(list = ls())
 library(Karlsson2013inR)
+#> Loading required package: MASS
+#> Loading required package: LaplacesDemon
 
 data("villani2009")
 yt <- villani2009
 yt <- ts(yt[1:102, ], start = start(yt), frequency = frequency(yt))
 plot.ts(yt)
+```
+
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+
+``` r
 
 bvar_obj <- bvar(data = yt)
 
@@ -245,3 +252,5 @@ fcst <- forecast(bvar_obj,
                  growth_rate_idx = c(4,5),
                  plot_idx = c(4,5,6))
 ```
+
+<img src="man/figures/README-unnamed-chunk-3-2.png" width="100%" /><img src="man/figures/README-unnamed-chunk-3-3.png" width="100%" /><img src="man/figures/README-unnamed-chunk-3-4.png" width="100%" />

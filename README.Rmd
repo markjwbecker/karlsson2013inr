@@ -69,6 +69,7 @@ $$
 is a $k \times m$ matrix.
 We have normally distributed errors $u_t \sim N(0, \Psi)$.
 
+
 ## Algorithm 4 (steady-state BVAR)
 
 Let $A(L)= I-A_1'L-\ldots-A_p'L^p$ we can then write the BVAR as
@@ -162,7 +163,7 @@ $$
 is based on the Minnesota prior with overall tightness $\pi_1$, cross-equation tightness $\pi_2$ and lag decay rate $\pi_3$.
 
 
-```{r, fig.width=10, fig.height=8,eval=FALSE}
+```{r, fig.width=10, fig.height=8,eval=TRUE}
 rm(list = ls())
 library(Karlsson2013inR)
 
