@@ -1,0 +1,32 @@
+---
+output:
+  github_document:
+    toc: true
+    toc_depth: 3
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# Karlsson2013inR
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+This package implements the algorithms in Karlsson (2013) in R.
+
+Karlsson, S. (2013). Forecasting with Bayesian Vector Autoregression. In: Elliott, G. and Timmerman, A. (eds) *Handbook of Economic Forecasting*. Elsevier B.V. Vol 2, Part B., pp. 791-897.
+
+## Installation
+
+```{r, eval=FALSE}
+remotes::install_github("markjwbecker/Karlsson2013inR", force = TRUE, upgrade = "never")
+```
