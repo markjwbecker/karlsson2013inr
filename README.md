@@ -78,11 +78,26 @@ $$
 y_t' =x_t'\Lambda' + \left[w_t'-q_t'(I_p \otimes \Lambda') \right]\Gamma_d +u_t'
 $$
 
-where $w_t'=(y_{t-1}',\dots,y_{t-p}')$ is a $kp$-dimensional vector of
-lagged endogenous variables, $q_t'=(d_{t-1}',\dots,d_{t-p}')$ is a
-$qp$-dimensional vector of lagged deterministic (exogenous) variables,
-and $\Gamma_d=\begin{pmatrix} A_1',\dots,A_p'\end{pmatrix}$. The prior
-is
+where
+
+$$
+w_t'=(y_{t-1}',\dots,y_{t-p}')
+$$
+
+is a $kp$-dimensional vector of lagged endogenous variables,
+
+$$
+q_t'=(d_{t-1}',\dots,d_{t-p}')
+$$
+
+is a $qp$-dimensional vector of lagged deterministic (exogenous)
+variables, and
+
+$$
+\Gamma_d=\begin{pmatrix} A_1',\dots,A_p'\end{pmatrix}
+$$
+
+The prior is
 
 $$
 \pi \begin{pmatrix} \Gamma_d, \Lambda, \Psi\end{pmatrix} = \pi \begin{pmatrix} \Gamma_d \end{pmatrix} \pi \begin{pmatrix} \Lambda \end{pmatrix} \pi \begin{pmatrix} \Psi \end{pmatrix}
