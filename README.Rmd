@@ -265,8 +265,12 @@ bvar_obj <- fit(bvar_obj,
                 iter = 4000,
                 warmup = 1000)
 
+round(bvar_obj$fit$SteadyState$Gamma_d_posterior_mean,2)
+round(bvar_obj$fit$SteadyState$Lambda_posterior_mean,2)
+round(bvar_obj$fit$SteadyState$Psi_posterior_mean,2)
+
 fcst <- forecast(bvar_obj,
-                 ci = 0.95,
+                 ci = 0.68,
                  fcst_type = "mean",
                  growth_rate_idx = c(4,5),
                  plot_idx = c(4,5,6))
