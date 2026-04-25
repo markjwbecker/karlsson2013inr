@@ -94,7 +94,7 @@ is a $dp$-dimensional vector of lagged deterministic (exogenous)
 variables, and
 
 $$
-\Gamma_d=\begin{pmatrix} A_1',\dots,A_p'\end{pmatrix}
+\Gamma_d'=\begin{pmatrix} A_1',\dots,A_p'\end{pmatrix}
 $$
 
 The prior is
