@@ -32,7 +32,9 @@ $$
 y_t'&=\sum_{i=1}^p y_{t-i}' A_i + x_t' C + u_t'\\
 &=z_t'\Gamma + u_t'
 \end{aligned}
-$$ where $x_t$ is a vector of $d$ deterministic variables,
+$$
+
+where $x_t$ is a vector of $d$ deterministic variables,
 $z_t' = \begin{pmatrix}y_{t-1}',\dots,y_{t-p}',x_t'\end{pmatrix}$ is a
 $k=mp + d$ dimensional vector and
 $\Gamma= \begin{pmatrix}A_1',\dots,A_p',C'\end{pmatrix}'$ is a
@@ -45,13 +47,17 @@ Let $A(L)= I-A_1'L-\ldots-A_p'L^p$ we can then write a stationary VAR as
 
 $$
 A(L)y_t = C'x_t +u_t
-$$ The unconditional expectation is the
+$$
+
+The unconditional expectation is the
 $E(y_t)=\mu_t=A^{-1}(L)C'x_t=\Lambda x_t$. We can further rewrite the
 model in mean deviation form
 
 $$
 A(L)(y_t-\Lambda x_t) = u_t
-$$ We can further rewrite this as a non-linear regression
+$$
+
+We can further rewrite this as a non-linear regression
 
 $$
 y_t' =x_t'\Lambda' + \left[w_t'-q_t'(I_p \otimes \Lambda') \right]\Gamma_d +u_t'
@@ -65,7 +71,9 @@ is
 
 $$
 \pi \begin{pmatrix} \Gamma_d, \Lambda, \Psi\end{pmatrix} = \pi \begin{pmatrix} \Gamma_d \end{pmatrix} \pi \begin{pmatrix} \Lambda \end{pmatrix} \pi \begin{pmatrix} \Psi \end{pmatrix}
-$$ with $\pi \begin{pmatrix} \Gamma_d \end{pmatrix}$ and
+$$
+
+with $\pi \begin{pmatrix} \Gamma_d \end{pmatrix}$ and
 $\pi \begin{pmatrix} \Lambda \end{pmatrix}$ normal,
 
 $$
@@ -73,7 +81,9 @@ $$
 \gamma_d &\sim N(\underline{\gamma}_d, \underline{\Sigma}_d)\\
 \lambda &= \textrm{vec} (\Lambda) \sim N(\underline{\lambda}, \underline{\Sigma}_{\lambda})
 \end{aligned}
-$$ and a Jeffreys’ prior for $\Psi$. Alternatively a proper inverse
+$$
+
+and a Jeffreys’ prior for $\Psi$. Alternatively a proper inverse
 Wishart, $\Psi \sim iW(\underline{S}, \underline{v})$, for $\Psi$ can be
 used. Here $\pi \begin{pmatrix} \Gamma_d \end{pmatrix}$ is based on the
 Minnesota prior with overall tightness $\pi_1$, cross-equation tightness
@@ -82,18 +92,11 @@ $\pi_2$ and lag decay rate $\pi_3$.
 ``` r
 rm(list = ls())
 library(Karlsson2013inR)
-#> Loading required package: MASS
-#> Loading required package: LaplacesDemon
 
 data("villani2009")
 yt <- villani2009
 yt <- ts(yt[1:102, ], start = start(yt), frequency = frequency(yt))
 plot.ts(yt)
-```
-
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
-
-``` r
 
 bvar_obj <- bvar(data = yt)
 
@@ -194,5 +197,3 @@ fcst <- forecast(bvar_obj,
                  growth_rate_idx = c(4,5),
                  plot_idx = c(4,5,6))
 ```
-
-<img src="man/figures/README-unnamed-chunk-3-2.png" width="100%" /><img src="man/figures/README-unnamed-chunk-3-3.png" width="100%" /><img src="man/figures/README-unnamed-chunk-3-4.png" width="100%" />

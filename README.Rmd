@@ -35,27 +35,34 @@ remotes::install_github("markjwbecker/Karlsson2013inR", force = TRUE, upgrade = 
 
 The BVAR model is
 
+
 $$
 \begin{aligned}
 y_t'&=\sum_{i=1}^p y_{t-i}' A_i + x_t' C + u_t'\\
 &=z_t'\Gamma + u_t'
 \end{aligned}
 $$
+
 where $x_t$ is a vector of $d$ deterministic variables, $z_t' = \begin{pmatrix}y_{t-1}',\dots,y_{t-p}',x_t'\end{pmatrix}$ is a $k=mp + d$ dimensional vector and $\Gamma= \begin{pmatrix}A_1',\dots,A_p',C'\end{pmatrix}'$ is a $k \times m$ matrix. We have normally distributed errors $u_t \sim N(0, \Psi)$.
 
 ## Algorithm 4 (steady-state BVAR)
 
 Let $A(L)= I-A_1'L-\ldots-A_p'L^p$ we can then write a stationary VAR as
 
+
 $$
 A(L)y_t = C'x_t +u_t
 $$
+
 The unconditional expectation is the $E(y_t)=\mu_t=A^{-1}(L)C'x_t=\Lambda x_t$. We can further rewrite the model in mean deviation form
+
 
 $$
 A(L)(y_t-\Lambda x_t) = u_t
 $$
+
 We can further rewrite this as a non-linear regression
+
 
 $$
 y_t' =x_t'\Lambda' + \left[w_t'-q_t'(I_p \otimes \Lambda') \right]\Gamma_d +u_t'
@@ -63,10 +70,13 @@ $$
 
 where $w_t'=(y_{t-1}',\dots,y_{t-p}')$ is a $kp$-dimensional vector of lagged endogenous variables, $q_t'=(d_{t-1}',\dots,d_{t-p}')$ is a $qp$-dimensional vector of lagged deterministic (exogenous) variables, and $\Gamma_d=\begin{pmatrix} A_1',\dots,A_p'\end{pmatrix}$. The prior is
 
+
 $$
 \pi \begin{pmatrix} \Gamma_d, \Lambda, \Psi\end{pmatrix} = \pi \begin{pmatrix} \Gamma_d \end{pmatrix} \pi \begin{pmatrix} \Lambda \end{pmatrix} \pi \begin{pmatrix} \Psi \end{pmatrix}
 $$
+
 with $\pi \begin{pmatrix} \Gamma_d \end{pmatrix}$ and $\pi \begin{pmatrix} \Lambda \end{pmatrix}$ normal,
+
 
 $$
 \begin{aligned}
@@ -74,9 +84,13 @@ $$
 \lambda &= \textrm{vec} (\Lambda) \sim N(\underline{\lambda}, \underline{\Sigma}_{\lambda})
 \end{aligned}
 $$
+
+
 and a Jeffreys' prior for $\Psi$. Alternatively a proper inverse Wishart, $\Psi \sim iW(\underline{S}, \underline{v})$, for $\Psi$ can be used. Here $\pi \begin{pmatrix} \Gamma_d \end{pmatrix}$ is based on the Minnesota prior with overall tightness $\pi_1$, cross-equation tightness $\pi_2$ and lag decay rate $\pi_3$.
 
-```{r, fig.width=10, fig.height=8,eval=TRUE}
+
+
+```{r, fig.width=10, fig.height=8,eval=FALSE}
 rm(list = ls())
 library(Karlsson2013inR)
 
