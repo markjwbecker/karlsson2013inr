@@ -2,8 +2,9 @@
 - [Karlsson2013inR](#karlsson2013inr)
   - [Installation](#installation)
   - [Introduction](#introduction)
-  - [Algorithm 2](#algorithm-2)
-  - [Algorithm 4 (steady-state BVAR)](#algorithm-4-steady-state-bvar)
+  - [Algorithm 2 (normal-diffuse and independent
+    normal-Wishart)](#algorithm-2-normal-diffuse-and-independent-normal-wishart)
+  - [Algorithm 4 (steady-state)](#algorithm-4-steady-state)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -51,7 +52,39 @@ $$
 is a $k \times m$ matrix. We have normally distributed errors
 $u_t \sim N(0, \Psi)$.
 
-## Algorithm 2
+## Algorithm 2 (normal-diffuse and independent normal-Wishart)
+
+The prior is
+
+$$
+\pi (\Gamma, \Psi) = \pi (\Gamma) \pi (\Psi)
+$$
+
+with $\pi (\Gamma)$ normal
+
+$$
+\gamma = \textrm{vec} (\Gamma) \sim N(\underline{\gamma}, \underline{\Sigma}_{\gamma})
+$$
+
+based on the Minnesota prior with overall tightness $\pi_1$,
+cross-equation tightness $\pi_2$ and lag decay rate $\pi_3$. We also
+have a hyperparameter $\pi_4$ for the deterministic terms. For the
+normal-diffuse prior, we use Jeffreys’ prior for $\Psi$
+
+$$
+p(\Psi) \propto\left|\Psi \right|^{-(m+1)/2}
+$$
+
+for the independent normal-Wishart we use
+
+$$
+\Psi \sim iW(\underline{S}, \underline{v})
+$$
+
+An uninformative prior can be (and is in this package) specified by
+setting $\underline{S}=(m_0-k-1)\hat{\Psi}$ where $\hat{\Psi}$ is the
+least squares estimate from the VAR($p$) (including the constant and
+dummy/trend variable if applicable), and $\underline{v}=m+2$.
 
 ``` r
 rm(list = ls())
@@ -106,12 +139,12 @@ bvar_obj2$predict$H <- 20
 bvar_obj2$predict$x_pred <- cbind(rep(1, 20), (nrow(yt)+1):(nrow(yt)+20))
 
 bvar_obj1 <- fit(bvar_obj1,
-                iter = 4000,
-                warmup = 2000)
+                iter = 400,
+                warmup = 200)
 
 bvar_obj2 <- fit(bvar_obj2,
-                iter = 4000,
-                warmup = 2000)
+                iter = 400,
+                warmup = 200)
 
 round(bvar_obj1$fit$Algorithm2$Gamma_posterior_mean,2)
 round(bvar_obj1$fit$Algorithm2$Psi_posterior_mean,2)
@@ -119,7 +152,7 @@ round(bvar_obj1$fit$Algorithm2$Psi_posterior_mean,2)
 round(bvar_obj2$fit$Algorithm2$Gamma_posterior_mean,2)
 round(bvar_obj2$fit$Algorithm2$Psi_posterior_mean,2)
 
-par(mfrow=c(4,1))
+par(mfrow=c(4,2))
 fcst1 <- forecast(bvar_obj1,
                  ci = 0.68,
                  fcst_type = "median",
@@ -134,7 +167,7 @@ m1 <- vars::VAR(yt, p=4, type="both")
 plot(predict(m1, n.ahead=20))
 ```
 
-## Algorithm 4 (steady-state BVAR)
+## Algorithm 4 (steady-state)
 
 Let $A(L)= I-A_1'L-\ldots-A_p'L^p$ we can then write the BVAR as
 
@@ -190,11 +223,20 @@ $$
 \end{aligned}
 $$
 
-and a Jeffreys’ prior for $\Psi$. Alternatively a proper inverse
-Wishart, $\Psi \sim iW(\underline{S}, \underline{v})$, for $\Psi$ can be
-used. Here $\pi(\Gamma_d)$ is based on the Minnesota prior with overall
+and Jeffreys’ prior for $\Psi$
+
+$$
+p(\Psi) \propto\left|\Psi \right|^{-(m+1)/2}
+$$
+
+Alternatively a proper inverse Wishart,
+$\Psi \sim iW(\underline{S}, \underline{v})$, for $\Psi$ can be used.
+Here $\pi(\Gamma_d)$ is based on the Minnesota prior with overall
 tightness $\pi_1$, cross-equation tightness $\pi_2$ and lag decay rate
-$\pi_3$.
+$\pi_3$. An uninformative prior can again be specified by setting
+$\underline{S}=(m_0-k-1)\hat{\Psi}$ where $\hat{\Psi}$ is the least
+squares estimate from the VAR($p$) (including the constant and
+dummy/trend variable if applicable), and $\underline{v}=m+2$.
 
 ``` r
 rm(list = ls())
