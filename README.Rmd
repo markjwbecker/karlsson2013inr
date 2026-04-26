@@ -209,8 +209,8 @@ with $\pi (\Gamma_d)$ and $\pi (\Lambda)$ normal,
 
 $$
 \begin{aligned}
-\gamma_d &\sim N(\underline{\gamma}_d, \underline{\Sigma}_d)\\
-\lambda &= \textrm{vec} (\Lambda) \sim N(\underline{\lambda}, \underline{\Sigma}_{\lambda})
+\gamma_d = \textrm{vec} (\Gamma_d) &\sim N(\underline{\gamma}_d, \underline{\Sigma}_d)\\
+\lambda = \textrm{vec} (\Lambda) &\sim N(\underline{\lambda}, \underline{\Sigma}_{\lambda})
 \end{aligned}
 $$
 
