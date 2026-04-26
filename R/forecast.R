@@ -7,7 +7,11 @@ forecast <- function (x, ci = 0.95, fcst_type = c("mean", "median"), growth_rate
   if (is.null(plot_idx)) 
     plot_idx <- 1:ncol(Y)
   
-  y_pred <- x$fit$SteadyState$fcst_draws
+  if(x$priors$steadystate){
+    y_pred <- x$fit$SteadyState$fcst_draws
+  } else {
+    y_pred <- x$fit$Algorithm2$fcst_draws
+  }
   y_pred_m <- apply(y_pred, c(1, 2), fcst_type)
   alpha <- 1 - ci
   y_pred_lower <- apply(y_pred, c(1, 2), quantile, probs = alpha/2)

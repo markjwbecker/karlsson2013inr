@@ -43,32 +43,92 @@ y_t'&=\sum_{i=1}^p y_{t-i}' A_i + x_t' C + u_t'\\
 \end{aligned}
 $$
 
-where
+
+where $x_t$ is a vector of $d$ deterministic variables (constant and or dummy/time trend), and $ z_t' = \begin{pmatrix}y_{t-1}',\dots,y_{t-p}',x_t'\end{pmatrix} $ is a $k=mp + d$ dimensional vector, and $\Gamma= \begin{pmatrix}A_1',\dots,A_p',C'\end{pmatrix}'$ is a $k \times m$ matrix. We have normally distributed errors $u_t \sim N(0, \Psi)$.
 
 
-$$
-x_t
-$$
+## Algorithm 2
 
+```{r, fig.width=10, fig.height=8,eval=FALSE}
+rm(list = ls())
+library(Karlsson2013inR)
+devtools::load_all()
+data("Canada", package="vars")
+yt <- Canada
+plot.ts(yt)
 
-is a vector of $d$ deterministic variables (constant and or dummy/time trend),
+pi_1 <- 0.2
+pi_2 <- 0.5
+pi_3 <- 1.0
+pi_4 <- 100
 
+#fol_pm = first own lag prior means
+fol_pm=c(1,1,1,1)
 
-$$
-z_t' = \begin{pmatrix}y_{t-1}',\dots,y_{t-p}',x_t'\end{pmatrix}
-$$
+bvar_obj1 <- bvar(data = yt)
+bvar_obj1 <- setup(bvar_obj1,
+                   p=4,
+                   deterministic = "constant_and_trend")
 
-is a $k=mp + d$ dimensional vector, and
+bvar_obj2 <- bvar(data = yt)
+bvar_obj2 <- setup(bvar_obj2,
+                   p=4,
+                   deterministic = "constant_and_trend")
 
+####
+# If 'Jeffrey=TRUE'  -> normal diffuse
+# If 'Jeffrey=FALSE' -> independent normal-Wishart
+####
 
-$$
-\Gamma= \begin{pmatrix}A_1',\dots,A_p',C'\end{pmatrix}'
-$$
+bvar_obj1 <- priors(bvar_obj1,
+                    pi_1,
+                    pi_2,
+                    pi_3,
+                    pi_4,
+                    fol_pm,
+                    Jeffrey=TRUE)
 
+bvar_obj2 <- priors(bvar_obj2,
+                    pi_1,
+                    pi_2,
+                    pi_3,
+                    pi_4,
+                    fol_pm,
+                    Jeffrey=FALSE)
 
-is a $k \times m$ matrix.
-We have normally distributed errors $u_t \sim N(0, \Psi)$.
+bvar_obj1$predict$H <- 20
+bvar_obj1$predict$x_pred <- cbind(rep(1, 20), (nrow(yt)+1):(nrow(yt)+20))
+bvar_obj2$predict$H <- 20
+bvar_obj2$predict$x_pred <- cbind(rep(1, 20), (nrow(yt)+1):(nrow(yt)+20))
 
+bvar_obj1 <- fit(bvar_obj1,
+                iter = 4000,
+                warmup = 2000)
+
+bvar_obj2 <- fit(bvar_obj2,
+                iter = 4000,
+                warmup = 2000)
+
+round(bvar_obj1$fit$Algorithm2$Gamma_posterior_mean,2)
+round(bvar_obj1$fit$Algorithm2$Psi_posterior_mean,2)
+
+round(bvar_obj2$fit$Algorithm2$Gamma_posterior_mean,2)
+round(bvar_obj2$fit$Algorithm2$Psi_posterior_mean,2)
+
+par(mfrow=c(4,1))
+fcst1 <- forecast(bvar_obj1,
+                 ci = 0.68,
+                 fcst_type = "median",
+                 show_all = TRUE)
+
+fcst2 <- forecast(bvar_obj2,
+                 ci = 0.68,
+                 fcst_type = "median",
+                 show_all = TRUE)
+
+m1 <- vars::VAR(yt, p=4, type="both")
+plot(predict(m1, n.ahead=20))
+```
 
 ## Algorithm 4 (steady-state BVAR)
 
@@ -163,7 +223,7 @@ $$
 is based on the Minnesota prior with overall tightness $\pi_1$, cross-equation tightness $\pi_2$ and lag decay rate $\pi_3$.
 
 
-```{r, fig.width=10, fig.height=8,eval=TRUE}
+```{r, fig.width=10, fig.height=8,eval=FALSE}
 rm(list = ls())
 library(Karlsson2013inR)
 

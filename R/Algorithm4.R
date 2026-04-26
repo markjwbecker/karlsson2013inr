@@ -95,10 +95,10 @@ Algorithm4 <- function(x, iter, warmup, H, x_pred, Jeffrey=FALSE){
     Gamma_d_j <- matrix(gamma_d[[j]], m*p, m)
     Psi_j <- Psi[[j]]                                    
     
-    A_j <- vector("list", p)
+    Phi_j <- vector("list", p)
     for (i in 1:p) {
       rows_idx <- ((i - 1) * m + 1):(i * m)
-      A_j[[i]] <- t(Gamma_d_j[rows_idx,])  # m x m
+      Phi_j[[i]] <- t(Gamma_d_j[rows_idx,])  # m x m
     }
     
     Y_pred_mat <- matrix(NA, nrow = H, ncol = m)
@@ -110,14 +110,14 @@ Algorithm4 <- function(x, iter, warmup, H, x_pred, Jeffrey=FALSE){
       
       if (h > 1) {
         for (i in 1:min(h - 1, p)) {
-          term <- (Y_pred_mat[h - i,] - x_pred[h - i,] %*% t(Lambda_j)) %*% t(A_j[[i]])
+          term <- (Y_pred_mat[h - i,] - x_pred[h - i,] %*% t(Lambda_j)) %*% t(Phi_j[[i]]) # Phi' = A
           ytilde_t <- ytilde_t + term
         }
       }
       
       if (h <= p) {
         for (i in h:p) {
-          term <- (Y[N + h - i,] - X[N + h - i,] %*% t(Lambda_j)) %*% t(A_j[[i]])
+          term <- (Y[N + h - i,] - X[N + h - i,] %*% t(Lambda_j)) %*% t(Phi_j[[i]]) #Phi' = A
           ytilde_t <- ytilde_t + term
         }
       }

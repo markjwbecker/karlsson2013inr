@@ -53,6 +53,7 @@ setup.bvar <- function(x, p, deterministic=c("constant", "constant_and_dummy", "
                   X=X,
                   W=W,
                   Q=Q,
+                  Z=Z,
                   d=d,
                   dummy=dummy,
                   trend=trend,

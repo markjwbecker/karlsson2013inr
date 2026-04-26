@@ -1,4 +1,13 @@
-priors<- function(x, pi_1=0.2, pi_2=0.5, pi_3 = 1, first_own_lag_prior_mean=NULL, lambda_pr_mean=NULL, lambda_pr_covmat=NULL, Jeffrey=TRUE){
+priors<- function(x,
+                  pi_1=0.2,
+                  pi_2=0.5,
+                  pi_3 = 1,
+                  pi_4 = NULL,
+                  first_own_lag_prior_mean=NULL,
+                  steadystate=FALSE,
+                  lambda_pr_mean=NULL,
+                  lambda_pr_covmat=NULL,
+                  Jeffrey=TRUE){
   
   priors <- list()
   
@@ -27,9 +36,8 @@ priors<- function(x, pi_1=0.2, pi_2=0.5, pi_3 = 1, first_own_lag_prior_mean=NULL
     sigma2 <- crossprod(U,U)/(nrow(Z)-ncol(Z))
     Sigma_AR[i,i] <- sigma2
   }
-  
-  V <- lapply(1:p, function(x) matrix(0, m, m))
   sigma <- sqrt(diag(Sigma_AR))
+  V <- lapply(1:p, function(x) matrix(0, m, m))
   
   for (l in 1:p) {
     for (i in 1:m) {
@@ -43,30 +51,62 @@ priors<- function(x, pi_1=0.2, pi_2=0.5, pi_3 = 1, first_own_lag_prior_mean=NULL
     }
   }
   V_mat <- do.call(cbind, V)
-  gamma_d_pr_covmat <- diag(c(t(V_mat)))
+  
+  if (steadystate) {
+    gamma_d_pr_covmat <- diag(c(t(V_mat)))
+  } else {
+    tmp <- t(V_mat)
+    for (i in 1:d) {
+      tmp <- rbind(tmp, rep(NA, m)) #deterministic
+      for (ii in 1:m) {
+      tmp[(m*p)+i,ii] <- (pi_1*pi_4*sigma[ii])^2
+      }
+    }
+    gamma_pr_covmat <- diag(c(tmp))
+  }
   
   if (is.null(first_own_lag_prior_mean)) first_own_lag_prior_mean <- rep(0,m)
   
-  mat <- matrix(0, nrow = m*p, ncol = m)
-  for (i in 1:m){
-    mat[i,i] <- first_own_lag_prior_mean[i]
+  if (steadystate) {
+    mat <- matrix(0, nrow = m*p, ncol = m)
+    for (i in 1:m){
+      mat[i,i] <- first_own_lag_prior_mean[i]
+    }
+    gamma_d_pr_mean = c(mat)
+  } else {
+    mat <- matrix(0, nrow = (m*p)+(d), ncol = m)
+    for (i in 1:m){
+      mat[i,i] <- first_own_lag_prior_mean[i]
+    }
+    gamma_pr_mean = c(mat)
   }
-  gamma_d_pr_mean = c(mat)
+
+  
   if(isFALSE(Jeffrey)){
     v_=m+2
-    S_ = (m_0-m-1)*setup$Psi_OLS
+    S_ = (v_-m-1)*setup$Psi_OLS
     priors$S_ <- S_
     priors$v_ <- v_
   }
   
-  priors$gamma_d_pr_mean <- gamma_d_pr_mean
-  priors$gamma_d_pr_covmat <- gamma_d_pr_covmat
+  if (steadystate) {
+    priors$gamma_d_pr_mean <- gamma_d_pr_mean
+    priors$gamma_d_pr_covmat <- gamma_d_pr_covmat
+    priors$gamma_pr_mean <- NULL
+    priors$gamma_pr_covmat <- NULL
+  } else {
+    priors$gamma_d_pr_mean <- NULL
+    priors$gamma_d_pr_covmat <- NULL
+    priors$gamma_pr_mean <- gamma_pr_mean
+    priors$gamma_pr_covmat <- gamma_pr_covmat
+  }
   
   priors$lambda_pr_mean <- lambda_pr_mean
   priors$lambda_pr_covmat <- lambda_pr_covmat
   
   priors$Jeffrey <- Jeffrey
   priors$Sigma_AR <- Sigma_AR
+  priors$steadystate <- steadystate
   x$priors <- priors
   
   return(x)

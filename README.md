@@ -2,6 +2,7 @@
 - [Karlsson2013inR](#karlsson2013inr)
   - [Installation](#installation)
   - [Introduction](#introduction)
+  - [Algorithm 2](#algorithm-2)
   - [Algorithm 4 (steady-state BVAR)](#algorithm-4-steady-state-bvar)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -34,27 +35,95 @@ y_t'&=\sum_{i=1}^p y_{t-i}' A_i + x_t' C + u_t'\\
 \end{aligned}
 $$
 
-where
-
-$$
-x_t
-$$
-
-is a vector of $d$ deterministic variables (constant and or dummy/time
-trend),
-
-$$
-z_t' = \begin{pmatrix}y_{t-1}',\dots,y_{t-p}',x_t'\end{pmatrix}
-$$
-
-is a $k=mp + d$ dimensional vector, and
-
-$$
-\Gamma= \begin{pmatrix}A_1',\dots,A_p',C'\end{pmatrix}'
-$$
-
-is a $k \times m$ matrix. We have normally distributed errors
+where $x_t$ is a vector of $d$ deterministic variables (constant and or
+dummy/time trend), and \$ z_t’ =
+\$ is a $k=mp + d$ dimensional vector, and
+$\Gamma= \begin{pmatrix}A_1',\dots,A_p',C'\end{pmatrix}'$ is a
+$k \times m$ matrix. We have normally distributed errors
 $u_t \sim N(0, \Psi)$.
+
+## Algorithm 2
+
+``` r
+rm(list = ls())
+library(Karlsson2013inR)
+devtools::load_all()
+data("Canada", package="vars")
+yt <- Canada
+plot.ts(yt)
+
+pi_1 <- 0.2
+pi_2 <- 0.5
+pi_3 <- 1.0
+pi_4 <- 100
+
+#fol_pm = first own lag prior means
+fol_pm=c(1,1,1,1)
+
+bvar_obj1 <- bvar(data = yt)
+bvar_obj1 <- setup(bvar_obj1,
+                   p=4,
+                   deterministic = "constant_and_trend")
+
+bvar_obj2 <- bvar(data = yt)
+bvar_obj2 <- setup(bvar_obj2,
+                   p=4,
+                   deterministic = "constant_and_trend")
+
+####
+# If 'Jeffrey=TRUE'  -> normal diffuse
+# If 'Jeffrey=FALSE' -> independent normal-Wishart
+####
+
+bvar_obj1 <- priors(bvar_obj1,
+                    pi_1,
+                    pi_2,
+                    pi_3,
+                    pi_4,
+                    fol_pm,
+                    Jeffrey=TRUE)
+
+bvar_obj2 <- priors(bvar_obj2,
+                    pi_1,
+                    pi_2,
+                    pi_3,
+                    pi_4,
+                    fol_pm,
+                    Jeffrey=FALSE)
+
+bvar_obj1$predict$H <- 20
+bvar_obj1$predict$x_pred <- cbind(rep(1, 20), (nrow(yt)+1):(nrow(yt)+20))
+bvar_obj2$predict$H <- 20
+bvar_obj2$predict$x_pred <- cbind(rep(1, 20), (nrow(yt)+1):(nrow(yt)+20))
+
+bvar_obj1 <- fit(bvar_obj1,
+                iter = 4000,
+                warmup = 2000)
+
+bvar_obj2 <- fit(bvar_obj2,
+                iter = 4000,
+                warmup = 2000)
+
+round(bvar_obj1$fit$Algorithm2$Gamma_posterior_mean,2)
+round(bvar_obj1$fit$Algorithm2$Psi_posterior_mean,2)
+
+round(bvar_obj2$fit$Algorithm2$Gamma_posterior_mean,2)
+round(bvar_obj2$fit$Algorithm2$Psi_posterior_mean,2)
+
+par(mfrow=c(4,1))
+fcst1 <- forecast(bvar_obj1,
+                 ci = 0.68,
+                 fcst_type = "median",
+                 show_all = TRUE)
+
+fcst2 <- forecast(bvar_obj2,
+                 ci = 0.68,
+                 fcst_type = "median",
+                 show_all = TRUE)
+
+m1 <- vars::VAR(yt, p=4, type="both")
+plot(predict(m1, n.ahead=20))
+```
 
 ## Algorithm 4 (steady-state BVAR)
 
@@ -140,18 +209,11 @@ cross-equation tightness $\pi_2$ and lag decay rate $\pi_3$.
 ``` r
 rm(list = ls())
 library(Karlsson2013inR)
-#> Loading required package: MASS
-#> Loading required package: LaplacesDemon
 
 data("villani2009")
 yt <- villani2009
 yt <- ts(yt[1:102, ], start = start(yt), frequency = frequency(yt))
 plot.ts(yt)
-```
-
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
-
-``` r
 
 bvar_obj <- bvar(data = yt)
 
@@ -247,53 +309,8 @@ bvar_obj <- fit(bvar_obj,
                 warmup = 1000)
 
 round(bvar_obj$fit$SteadyState$Gamma_d_posterior_mean,2)
-#>        [,1]  [,2]  [,3]  [,4]  [,5]  [,6]  [,7]
-#>  [1,]  0.18  0.03 -0.01  0.12  0.07 -0.12  0.00
-#>  [2,] -0.02  0.32  0.25  0.12 -0.07  0.01  0.00
-#>  [3,] -0.01  0.04  0.92 -0.04  0.06  0.05  0.00
-#>  [4,]  0.00  0.00  0.00  0.23 -0.09 -0.10  0.00
-#>  [5,]  0.00  0.00  0.00  0.00  0.08  0.06  0.00
-#>  [6,]  0.00  0.00  0.00  0.00  0.02  0.76  0.00
-#>  [7,]  0.00  0.00  0.00  1.20  3.97  0.77  0.93
-#>  [8,]  0.03 -0.01  0.09  0.02 -0.01  0.09  0.00
-#>  [9,]  0.01  0.02  0.04  0.00 -0.03 -0.14  0.00
-#> [10,] -0.02 -0.01 -0.01  0.00  0.04  0.07  0.00
-#> [11,]  0.00  0.00  0.00  0.11 -0.01  0.15  0.00
-#> [12,]  0.00  0.00  0.00  0.01 -0.04 -0.05  0.00
-#> [13,]  0.00  0.00  0.00 -0.01  0.01  0.04  0.00
-#> [14,]  0.00  0.00  0.00  0.55 -0.39  0.36 -0.04
-#> [15,]  0.01 -0.01  0.00  0.02 -0.01  0.00  0.00
-#> [16,] -0.02  0.06 -0.01  0.00  0.08  0.02  0.00
-#> [17,]  0.00  0.00  0.02  0.00  0.00  0.03  0.00
-#> [18,]  0.00  0.00  0.00  0.07  0.01 -0.02  0.00
-#> [19,]  0.00  0.00  0.00  0.00  0.02 -0.02  0.00
-#> [20,]  0.00  0.00  0.00  0.01  0.00  0.00  0.00
-#> [21,]  0.00  0.00  0.00 -0.12 -0.03 -0.58  0.00
-#> [22,]  0.03 -0.01  0.00  0.00  0.03  0.02  0.00
-#> [23,] -0.01  0.16 -0.03  0.00  0.01  0.02  0.00
-#> [24,]  0.00  0.00 -0.02  0.00  0.00  0.03  0.00
-#> [25,]  0.00  0.00  0.00 -0.08  0.01  0.03  0.00
-#> [26,]  0.00  0.00  0.00  0.00  0.06 -0.01  0.00
-#> [27,]  0.00  0.00  0.00  0.00 -0.01  0.00  0.00
-#> [28,]  0.00  0.00  0.00 -0.16 -0.09 -0.19 -0.01
 round(bvar_obj$fit$SteadyState$Lambda_posterior_mean,2)
-#>      [,1]  [,2]
-#> [1,] 0.58  0.08
-#> [2,] 0.50  0.47
-#> [3,] 4.94  2.02
-#> [4,] 0.58 -0.04
-#> [5,] 0.49  1.15
-#> [6,] 4.29  4.46
-#> [7,] 3.92 -0.10
 round(bvar_obj$fit$SteadyState$Psi_posterior_mean,2)
-#>       [,1]  [,2] [,3]  [,4]  [,5]  [,6]  [,7]
-#> [1,]  0.15 -0.01 0.01  0.07 -0.01  0.00  0.00
-#> [2,] -0.01  0.09 0.05  0.01  0.13  0.04  0.00
-#> [3,]  0.01  0.05 0.52  0.01  0.18  0.11  0.00
-#> [4,]  0.07  0.01 0.01  0.19 -0.05 -0.01  0.00
-#> [5,] -0.01  0.13 0.18 -0.05  0.60  0.11  0.00
-#> [6,]  0.00  0.04 0.11 -0.01  0.11  1.57 -0.01
-#> [7,]  0.00  0.00 0.00  0.00  0.00 -0.01  0.00
 
 fcst <- forecast(bvar_obj,
                  ci = 0.68,
@@ -301,5 +318,3 @@ fcst <- forecast(bvar_obj,
                  growth_rate_idx = c(4,5),
                  plot_idx = c(4,5,6))
 ```
-
-<img src="man/figures/README-unnamed-chunk-3-2.png" width="100%" /><img src="man/figures/README-unnamed-chunk-3-3.png" width="100%" /><img src="man/figures/README-unnamed-chunk-3-4.png" width="100%" />
