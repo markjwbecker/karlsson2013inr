@@ -149,12 +149,12 @@ bvar_obj2$predict$H <- 20
 bvar_obj2$predict$x_pred <- cbind(rep(1, 20), (nrow(yt)+1):(nrow(yt)+20))
 
 bvar_obj1 <- fit(bvar_obj1,
-                iter = 1000,
-                warmup = 250)
+                iter = 10000,
+                warmup = 2500)
 
 bvar_obj2 <- fit(bvar_obj2,
-                iter = 1000,
-                warmup = 250)
+                iter = 10000,
+                warmup = 2500)
 
 round(bvar_obj1$fit$Algorithm2$Gamma_posterior_mean,2)
 round(bvar_obj2$fit$Algorithm2$Gamma_posterior_mean,2)
@@ -354,8 +354,8 @@ bvar_obj$predict$H <- 12
 bvar_obj$predict$x_pred <- cbind(rep(1, 12), 0)
 
 bvar_obj <- fit(bvar_obj,
-                iter = 500,
-                warmup = 250)
+                iter = 5000,
+                warmup = 2500)
 
 round(bvar_obj$fit$SteadyState$Gamma_d_posterior_mean,2)
 round(bvar_obj$fit$SteadyState$Lambda_posterior_mean,2)
