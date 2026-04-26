@@ -82,7 +82,7 @@ $$
 $$
 
 An uninformative prior can be (and is in this package) specified by
-setting $\underline{S}=(m_0-k-1)\hat{\Psi}$ where $\hat{\Psi}$ is the
+setting $\underline{S}=(\underline{v}-k-1)\hat{\Psi}$ where $\hat{\Psi}$ is the
 least squares estimate from the VAR($p$) (including the constant and
 dummy/trend variable if applicable), and $\underline{v}=m+2$.
 
@@ -298,7 +298,7 @@ $$
 Alternatively a proper inverse Wishart,
 $\Psi \sim iW(\underline{S}, \underline{v})$, for $\Psi$ can be used. An
 uninformative inverse Wishart prior can again be specified by setting
-$\underline{S}=(m_0-k-1)\hat{\Psi}$ where $\hat{\Psi}$ is the least
+$\underline{S}=(\underline{v}-k-1)\hat{\Psi}$ where $\hat{\Psi}$ is the least
 squares estimate from the VAR($p$) (including the constant and
 dummy/trend variable if applicable), and $\underline{v}=m+2$.
 
