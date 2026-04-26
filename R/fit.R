@@ -1,8 +1,8 @@
-fit <- function(x, iter = 5000, warmup = 2500, steadystate=FALSE) {
+fit <- function(x, iter = 5000, warmup = 2500) {
   
   Jeffrey <- x$priors$Jeffrey
     
-  if (steadystate) {
+  if (x$priors$steadystate) {
     x$fit$SteadyState <- Algorithm4(
       x = x,
       iter = iter,
