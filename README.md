@@ -178,22 +178,10 @@ $$
 The prior is
 
 $$
-\pi \begin{pmatrix} \Gamma_d, \Lambda, \Psi\end{pmatrix} = \pi \begin{pmatrix} \Gamma_d \end{pmatrix} \pi \begin{pmatrix} \Lambda \end{pmatrix} \pi \begin{pmatrix} \Psi \end{pmatrix}
+\pi (\Gamma_d, \Lambda, \Psi) = \pi (\Gamma_d) \pi (\Lambda) \pi (\Psi)
 $$
 
-with
-
-$$
-\pi \begin{pmatrix} \Gamma_d \end{pmatrix}
-$$
-
-and
-
-$$
-\pi \begin{pmatrix} \Lambda \end{pmatrix}
-$$
-
-normal,
+with $\pi (\Gamma_d)$ and $\pi (\Lambda)$ normal,
 
 $$
 \begin{aligned}
@@ -204,16 +192,9 @@ $$
 
 and a Jeffreys’ prior for $\Psi$. Alternatively a proper inverse
 Wishart, $\Psi \sim iW(\underline{S}, \underline{v})$, for $\Psi$ can be
-used.
-
-Here
-
-$$
-\pi \begin{pmatrix} \Gamma_d \end{pmatrix}
-$$
-
-is based on the Minnesota prior with overall tightness $\pi_1$,
-cross-equation tightness $\pi_2$ and lag decay rate $\pi_3$.
+used. Here $\pi(\Gamma_d)$ is based on the Minnesota prior with overall
+tightness $\pi_1$, cross-equation tightness $\pi_2$ and lag decay rate
+$\pi_3$.
 
 ``` r
 rm(list = ls())
