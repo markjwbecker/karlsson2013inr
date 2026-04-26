@@ -94,7 +94,7 @@ $$
 An uninformative prior can be (and is in this package) specified by setting $\underline{S}=(m_0-k-1)\hat{\Psi}$ where $\hat{\Psi}$ is the least squares estimate from the VAR($p$) (including the constant and dummy/trend variable if applicable), and $\underline{v}=m+2$.
 
 
-```{r, fig.width=10, fig.height=10,eval=FALSE}
+```{r, fig.width=10, fig.height=10,eval=TRUE}
 rm(list = ls())
 library(Karlsson2013inR)
 devtools::load_all()
@@ -141,18 +141,29 @@ bvar_obj2 <- priors(bvar_obj2,
                     fol_pm,
                     Jeffrey=FALSE)
 
+p <- bvar_obj1$setup$p
+m <- bvar_obj1$setup$m
+d <- bvar_obj1$setup$d
+restriction_matrix <- matrix(1, (m*p)+d, m)
+
+restriction_matrix[m*p+2, 4] <- 0 #no trend term for unemployment
+
+bvar_obj1 <- restrict_Gamma(bvar_obj1, restriction_matrix)
+bvar_obj2 <- restrict_Gamma(bvar_obj2, restriction_matrix)
+
+
 bvar_obj1$predict$H <- 20
 bvar_obj1$predict$x_pred <- cbind(rep(1, 20), (nrow(yt)+1):(nrow(yt)+20))
 bvar_obj2$predict$H <- 20
 bvar_obj2$predict$x_pred <- cbind(rep(1, 20), (nrow(yt)+1):(nrow(yt)+20))
 
 bvar_obj1 <- fit(bvar_obj1,
-                iter = 400,
-                warmup = 200)
+                iter = 500,
+                warmup = 250)
 
 bvar_obj2 <- fit(bvar_obj2,
-                iter = 400,
-                warmup = 200)
+                iter = 500,
+                warmup = 250)
 
 round(bvar_obj1$fit$Algorithm2$Gamma_posterior_mean,2)
 round(bvar_obj1$fit$Algorithm2$Psi_posterior_mean,2)
@@ -160,7 +171,7 @@ round(bvar_obj1$fit$Algorithm2$Psi_posterior_mean,2)
 round(bvar_obj2$fit$Algorithm2$Gamma_posterior_mean,2)
 round(bvar_obj2$fit$Algorithm2$Psi_posterior_mean,2)
 
-par(mfrow=c(4,2))
+par(mfcol = c(4, 2))
 fcst1 <- forecast(bvar_obj1,
                  ci = 0.68,
                  fcst_type = "median",
@@ -171,7 +182,7 @@ fcst2 <- forecast(bvar_obj2,
                  fcst_type = "median",
                  show_all = TRUE)
 
-m1 <- vars::VAR(yt, p=4, type="both")
+m1 <- vars::VAR(yt, p=4, type="both") #constant and trend
 plot(predict(m1, n.ahead=20))
 ```
 
@@ -243,7 +254,7 @@ $$
 \end{aligned}
 $$
 
-Here $\pi (\Gamma_d)$ is based on the Minnesota prior with overall tightness $\pi_1$, cross-equation tightness $\pi_2$ and lag decay rate $\pi_3$. Now $\pi (\Lambda)$ is really the core of the steady-state model, where we specify our prior beliefs about the location and scale of the steady-state parameters. For $\Psi$ we use Jeffreys' prior
+Here $\pi (\Gamma_d)$ is based on the Minnesota prior with overall tightness $\pi_1$, cross-equation tightness $\pi_2$ and lag decay rate $\pi_3$. Note that $\pi (\Lambda)$ is the core of the steady-state model, where we specify our prior beliefs about the location and scale of the steady-state parameters. For $\Psi$ we use Jeffreys' prior
 
 $$
 p(\Psi) \propto\left|\Psi \right|^{-(m+1)/2}
