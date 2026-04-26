@@ -89,170 +89,6 @@ dummy/trend variable if applicable), and $\underline{v}=m+2$.
 ``` r
 rm(list = ls())
 library(Karlsson2013inR)
-#> Loading required package: MASS
-#> Loading required package: LaplacesDemon
-devtools::load_all()
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(dsc_path): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(file): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(dsc_path): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(file): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> ℹ Loading Karlsson2013inR
-#> Warning in readLines(dsc_path): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(dsc_path): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(file): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(dsc_path): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(file): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(dsc_path): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(file): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(dsc_path): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(file): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(dsc_path): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(file): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(dsc_path): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(file): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(dsc_path): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(file): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(dsc_path): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(file): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(dsc_path): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(file): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(dsc_path): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(file): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(dsc_path): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(file): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(dsc_path): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(file): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(dsc_path): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(file): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(dsc_path): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(file): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(dsc_path): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(file): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(dsc_path): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(file): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(dsc_path): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(file): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
-#> Warning in readLines(f, n): incomplete final line found on
-#> 'C:/Users/markj/Documents/package/Karlsson2013inR/DESCRIPTION'
 data("Canada", package="vars")
 yt <- Canada
 plot.ts(yt)
@@ -309,7 +145,7 @@ restriction_matrix <- matrix(1, (m*p)+d, m)
 restriction_matrix[m*p+2, 4] <- 0 #no trend term for unemployment
 
 bvar_obj1 <- restrict_Gamma(bvar_obj1, restriction_matrix)
-#bvar_obj2 <- restrict_Gamma(bvar_obj2, restriction_matrix)
+bvar_obj2 <- restrict_Gamma(bvar_obj2, restriction_matrix)
 
 
 bvar_obj1$predict$H <- 20
@@ -318,65 +154,65 @@ bvar_obj2$predict$H <- 20
 bvar_obj2$predict$x_pred <- cbind(rep(1, 20), (nrow(yt)+1):(nrow(yt)+20))
 
 bvar_obj1 <- fit(bvar_obj1,
-                iter = 2000,
-                warmup = 1000)
+                iter = 5000,
+                warmup = 2000)
 
 bvar_obj2 <- fit(bvar_obj2,
-                iter = 2000,
-                warmup = 1000)
+                iter = 5000,
+                warmup = 2000)
 
 round(bvar_obj1$fit$Algorithm2$Gamma_posterior_mean,2)
 #>        [,1]  [,2]  [,3]  [,4]
-#>  [1,]  1.16  0.07  0.00 -0.10
-#>  [2,]  0.09  1.02 -0.13 -0.04
+#>  [1,]  1.16  0.08  0.00 -0.10
+#>  [2,]  0.09  1.03 -0.13 -0.04
 #>  [3,] -0.03 -0.05  0.87  0.00
-#>  [4,] -0.04  0.08  0.02  0.97
-#>  [5,] -0.19 -0.01  0.08  0.04
-#>  [6,]  0.00 -0.06 -0.04  0.00
+#>  [4,] -0.04  0.09  0.02  0.98
+#>  [5,] -0.19 -0.02  0.08  0.04
+#>  [6,]  0.00 -0.07 -0.04  0.00
 #>  [7,]  0.01 -0.02 -0.05  0.00
-#>  [8,]  0.05  0.11 -0.07 -0.04
+#>  [8,]  0.05  0.10 -0.08 -0.04
 #>  [9,] -0.03  0.00  0.03  0.05
 #> [10,]  0.00 -0.03  0.01  0.00
 #> [11,]  0.01  0.00  0.03  0.00
-#> [12,]  0.04  0.05 -0.01 -0.01
-#> [13,]  0.02  0.00  0.01  0.03
+#> [12,]  0.04  0.05 -0.02 -0.01
+#> [13,]  0.01  0.00  0.01  0.03
 #> [14,]  0.00 -0.02  0.00  0.00
-#> [15,]  0.01  0.00  0.06  0.00
+#> [15,]  0.01  0.01  0.05  0.00
 #> [16,]  0.02  0.02  0.00 -0.02
-#> [17,]  0.07  2.46  0.53  3.14
-#> [18,]  0.01  0.06  0.05  0.00
-round(bvar_obj1$fit$Algorithm2$Psi_posterior_mean,2)
-#>       [,1]  [,2]  [,3]  [,4]
-#> [1,]  0.18  0.01 -0.09 -0.12
-#> [2,]  0.01  0.46  0.00 -0.01
-#> [3,] -0.09  0.00  0.61  0.07
-#> [4,] -0.12 -0.01  0.07  0.12
-
+#> [17,]  0.01  1.70  1.07  3.04
+#> [18,]  0.00  0.06  0.04  0.00
 round(bvar_obj2$fit$Algorithm2$Gamma_posterior_mean,2)
 #>        [,1]  [,2]  [,3]  [,4]
-#>  [1,]  1.17  0.08 -0.01 -0.10
-#>  [2,]  0.09  1.03 -0.13 -0.03
+#>  [1,]  1.17  0.08  0.00 -0.10
+#>  [2,]  0.09  1.03 -0.13 -0.04
 #>  [3,] -0.03 -0.05  0.87  0.00
-#>  [4,] -0.03  0.09  0.01  0.97
-#>  [5,] -0.20 -0.02  0.07  0.04
+#>  [4,] -0.04  0.09  0.03  0.98
+#>  [5,] -0.20 -0.02  0.08  0.04
 #>  [6,]  0.00 -0.07 -0.04  0.00
 #>  [7,]  0.01 -0.02 -0.05  0.01
-#>  [8,]  0.05  0.11 -0.08 -0.05
-#>  [9,] -0.02  0.00  0.03  0.05
-#> [10,] -0.01 -0.03  0.01  0.00
-#> [11,]  0.01  0.00  0.03  0.00
-#> [12,]  0.04  0.05 -0.01 -0.01
+#>  [8,]  0.05  0.11 -0.08 -0.04
+#>  [9,] -0.03  0.00  0.03  0.05
+#> [10,]  0.00 -0.03  0.01  0.00
+#> [11,]  0.01  0.00  0.03 -0.01
+#> [12,]  0.04  0.05 -0.02 -0.01
 #> [13,]  0.02  0.00  0.01  0.03
 #> [14,]  0.00 -0.02  0.00  0.00
 #> [15,]  0.01  0.01  0.06  0.00
 #> [16,]  0.02  0.02  0.00 -0.02
-#> [17,] -0.36  1.34  1.90  2.84
-#> [18,]  0.01  0.06  0.04 -0.01
+#> [17,]  0.03  1.92  0.46  3.25
+#> [18,]  0.00  0.06  0.05  0.00
+
+round(bvar_obj1$fit$Algorithm2$Psi_posterior_mean,2)
+#>       [,1]  [,2]  [,3]  [,4]
+#> [1,]  0.19  0.01 -0.10 -0.12
+#> [2,]  0.01  0.45  0.00 -0.01
+#> [3,] -0.10  0.00  0.61  0.08
+#> [4,] -0.12 -0.01  0.08  0.12
 round(bvar_obj2$fit$Algorithm2$Psi_posterior_mean,2)
 #>       [,1] [,2]  [,3]  [,4]
 #> [1,]  0.17 0.00 -0.09 -0.11
-#> [2,]  0.00 0.41  0.00  0.00
-#> [3,] -0.09 0.00  0.57  0.07
+#> [2,]  0.00 0.42  0.00  0.00
+#> [3,] -0.09 0.00  0.56  0.07
 #> [4,] -0.11 0.00  0.07  0.11
 
 par(mfcol = c(4, 2))
@@ -396,7 +232,6 @@ fcst2 <- forecast(bvar_obj2,
 ``` r
 
 m1 <- vars::VAR(yt, p=4, type="both") #constant and trend
-par(mfcol = c(1, 1))
 plot(predict(m1, n.ahead=20))
 ```
 
@@ -477,7 +312,7 @@ dummy/trend variable if applicable), and $\underline{v}=m+2$.
 
 ``` r
 rm(list = ls())
-library(Karlsson2013inR)
+par(mfcol = c(1, 1))
 
 data("villani2009")
 yt <- villani2009
@@ -575,7 +410,7 @@ bvar_obj$predict$x_pred <- cbind(rep(1, 12), 0)
 
 bvar_obj <- fit(bvar_obj,
                 iter = 4000,
-                warmup = 1000)
+                warmup = 2000)
 
 round(bvar_obj$fit$SteadyState$Gamma_d_posterior_mean,2)
 round(bvar_obj$fit$SteadyState$Lambda_posterior_mean,2)
