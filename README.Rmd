@@ -243,14 +243,13 @@ $$
 \end{aligned}
 $$
 
-
-and Jeffreys' prior for $\Psi$
+Here $\pi (\Gamma_d)$ is based on the Minnesota prior with overall tightness $\pi_1$, cross-equation tightness $\pi_2$ and lag decay rate $\pi_3$. Now $\pi (\Lambda)$ is really the core of the steady-state model, where we specify our prior beliefs about the location and scale of the steady-state parameters. For $\Psi$ we use Jeffreys' prior
 
 $$
 p(\Psi) \propto\left|\Psi \right|^{-(m+1)/2}
 $$
 
-Alternatively a proper inverse Wishart, $\Psi \sim iW(\underline{S}, \underline{v})$, for $\Psi$ can be used. Here $\pi(\Gamma_d)$ is based on the Minnesota prior with overall tightness $\pi_1$, cross-equation tightness $\pi_2$ and lag decay rate $\pi_3$. An uninformative prior can again be specified by setting $\underline{S}=(m_0-k-1)\hat{\Psi}$ where $\hat{\Psi}$ is the least squares estimate from the VAR($p$) (including the constant and dummy/trend variable if applicable), and $\underline{v}=m+2$.
+Alternatively a proper inverse Wishart, $\Psi \sim iW(\underline{S}, \underline{v})$, for $\Psi$ can be used. An uninformative inverse Wishart prior can again be specified by setting $\underline{S}=(m_0-k-1)\hat{\Psi}$ where $\hat{\Psi}$ is the least squares estimate from the VAR($p$) (including the constant and dummy/trend variable if applicable), and $\underline{v}=m+2$.
 
 
 ```{r, fig.width=10, fig.height=8,eval=FALSE}
