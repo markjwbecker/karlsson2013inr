@@ -37,10 +37,18 @@ $$
 
 where $x_t$ is a vector of $d$ deterministic variables (constant and or
 dummy/time trend), and
-$z_t' = \begin{pmatrix}y_{t-1}',\dots,y_{t-p}',x_t'\end{pmatrix}$ is a
-$k=mp+d$ dimensional vector, and
-$\Gamma=\begin{pmatrix}A_1',\dots,A_p',C'\end{pmatrix}'$ is a
-$k \times m$ matrix. We have normally distributed errors
+
+$$
+z_t' = \begin{pmatrix}y_{t-1}',\dots,y_{t-p}',x_t'\end{pmatrix}
+$$
+
+is a $k=mp+d$ dimensional vector, and
+
+$$
+\Gamma=\begin{pmatrix}A_1',\dots,A_p',C'\end{pmatrix}'
+$$
+
+is a $k \times m$ matrix. We have normally distributed errors
 $u_t \sim N(0, \Psi)$.
 
 ## Algorithm 2
