@@ -172,12 +172,12 @@ round(bvar_obj2$fit$Algorithm2$Psi_posterior_mean,2)
 
 par(mfcol = c(4, 2))
 fcst1 <- forecast(bvar_obj1,
-                 ci = 0.68,
+                 ci = 0.95,
                  fcst_type = "median",
                  show_all = TRUE)
 
 fcst2 <- forecast(bvar_obj2,
-                 ci = 0.68,
+                 ci = 0.95,
                  fcst_type = "median",
                  show_all = TRUE)
 
