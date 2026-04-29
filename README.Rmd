@@ -79,7 +79,7 @@ $$
 \gamma = \textrm{vec} (\Gamma) \sim N(\underline{\gamma}, \underline{\Sigma}_{\gamma})
 $$
 
-based on the Minnesota prior with overall tightness $\pi_1$, cross-equation tightness $\pi_2$ and lag decay rate $\pi_3$. We also have a hyperparameter $\pi_4$ for the deterministic terms. For the normal-diffuse prior, we use Jeffreys' prior for $\Psi$
+based on the Minnesota prior with overall tightness $\pi_1$, relative (cross-equation) tightness $\pi_2$ and lag decay rate $\pi_3$. We also have a hyperparameter $\pi_4$ for the deterministic terms. For the normal-diffuse prior, we use Jeffreys' prior for $\Psi$
 
 $$
 p(\Psi) \propto\left|\Psi \right|^{-(m+1)/2}
@@ -91,7 +91,7 @@ $$
 \Psi \sim iW(\underline{S}, \underline{v})
 $$
 
-An uninformative prior can be (and is in this package) specified by setting $\underline{S}=(\underline{v}-k-1)\hat{\Psi}$ where $\hat{\Psi}$ is the least squares estimate from the VAR($p$) (including the constant and dummy/trend variable if applicable), and $\underline{v}=m+2$.
+An uninformative prior can be (default in this package) specified by setting $\underline{S}=(\underline{v}-k-1)\hat{\Psi}$ where $\hat{\Psi}$ is the least squares estimate from the VAR($p$) (including the constant and dummy/trend variable if applicable), and $\underline{v}=m+2$. You may however change $\underline{S}$ and $\underline{v}$ as you please.
 
 
 ```{r, fig.width=10, fig.height=10,eval=TRUE, message=FALSE, warning=FALSE}
@@ -106,7 +106,6 @@ bvar_obj <- setup(bvar_obj,
                   p=4,
                   deterministic = "constant_and_trend")
 
-
 ######################################################
 # If 'Jeffrey=TRUE'  -> normal diffuse
 # If 'Jeffrey=FALSE' -> independent normal-Wishart
@@ -120,6 +119,15 @@ bvar_obj <- priors(bvar_obj,
                    first_own_lag_prior_mean=c(1,1,1,1),
                    Jeffrey=TRUE)
 
+######################################################
+# If you choose Jeffrey=FALSE, and as such use the
+# independent normal-Wishart prior you may change
+# the scale matrix 'S_' and degrees of freedom 'v_'
+# as you please after running priors()
+
+#bvar_obj$priors$S_ <- (50-4-1)*diag(4)
+#bvar_obj$priors$v_  <- 50
+######################################################
 
 p <- bvar_obj$setup$p
 m <- bvar_obj$setup$m
@@ -134,8 +142,8 @@ bvar_obj$predict$H <- 20
 bvar_obj$predict$x_pred <- cbind(rep(1, 20), (nrow(yt)+1):(nrow(yt)+20))
 
 bvar_obj <- fit(bvar_obj,
-                iter = 1000,
-                warmup = 250)
+                iter = 5000,
+                warmup = 2500)
 
 round(bvar_obj$fit$Algorithm2$Gamma_posterior_mean,2)
 round(bvar_obj$fit$Algorithm2$Psi_posterior_mean,2)
@@ -219,13 +227,13 @@ $$
 \end{aligned}
 $$
 
-Here $\pi (\Gamma_d)$ is based on the Minnesota prior with overall tightness $\pi_1$, cross-equation tightness $\pi_2$ and lag decay rate $\pi_3$. Note that $\pi (\Lambda)$ is the core of the steady-state model, where we specify our prior beliefs about the location and scale of the steady-state parameters. For $\Psi$ we use Jeffreys' prior
+Here $\pi (\Gamma_d)$ is based on the Minnesota prior with overall tightness $\pi_1$, relative (cross-equation) tightness $\pi_2$ and lag decay rate $\pi_3$. Note that $\pi (\Lambda)$ is the core of the steady-state model, where we specify our prior beliefs about the location and scale of the steady-state parameters. For $\Psi$ we use Jeffreys' prior
 
 $$
 p(\Psi) \propto\left|\Psi \right|^{-(m+1)/2}
 $$
 
-Alternatively a proper inverse Wishart, $\Psi \sim iW(\underline{S}, \underline{v})$, for $\Psi$ can be used. An uninformative inverse Wishart prior can again be specified by setting $\underline{S}=(\underline{v}-k-1)\hat{\Psi}$ where $\hat{\Psi}$ is the least squares estimate from the VAR($p$) (including the constant and dummy/trend variable if applicable), and $\underline{v}=m+2$.
+Alternatively a proper inverse Wishart, $\Psi \sim iW(\underline{S}, \underline{v})$, for $\Psi$ can be used. An uninformative inverse Wishart prior can again be specified by setting $\underline{S}=(\underline{v}-k-1)\hat{\Psi}$ where $\hat{\Psi}$ is the least squares estimate from the VAR($p$) (including the constant and dummy/trend variable if applicable), and $\underline{v}=m+2$. Again, the scale matrix and degrees of freedom may be changed to the users desires.
 
 
 ```{r, fig.width=10, fig.height=8,eval=TRUE, message=FALSE, warning=FALSE}

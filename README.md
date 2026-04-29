@@ -66,8 +66,8 @@ $$
 \gamma = \textrm{vec} (\Gamma) \sim N(\underline{\gamma}, \underline{\Sigma}_{\gamma})
 $$
 
-based on the Minnesota prior with overall tightness $\pi_1$,
-cross-equation tightness $\pi_2$ and lag decay rate $\pi_3$. We also
+based on the Minnesota prior with overall tightness $\pi_1$, relative
+(cross-equation) tightness $\pi_2$ and lag decay rate $\pi_3$. We also
 have a hyperparameter $\pi_4$ for the deterministic terms. For the
 normal-diffuse prior, we use Jeffreys’ prior for $\Psi$
 
@@ -81,10 +81,11 @@ $$
 \Psi \sim iW(\underline{S}, \underline{v})
 $$
 
-An uninformative prior can be (and is in this package) specified by
+An uninformative prior can be (default in this package) specified by
 setting $\underline{S}=(\underline{v}-k-1)\hat{\Psi}$ where $\hat{\Psi}$
 is the least squares estimate from the VAR($p$) (including the constant
-and dummy/trend variable if applicable), and $\underline{v}=m+2$.
+and dummy/trend variable if applicable), and $\underline{v}=m+2$. You
+may however change $\underline{S}$ and $\underline{v}$ as you please.
 
 ``` r
 rm(list = ls())
@@ -103,7 +104,6 @@ bvar_obj <- setup(bvar_obj,
                   p=4,
                   deterministic = "constant_and_trend")
 
-
 ######################################################
 # If 'Jeffrey=TRUE'  -> normal diffuse
 # If 'Jeffrey=FALSE' -> independent normal-Wishart
@@ -117,6 +117,15 @@ bvar_obj <- priors(bvar_obj,
                    first_own_lag_prior_mean=c(1,1,1,1),
                    Jeffrey=TRUE)
 
+######################################################
+# If you choose Jeffrey=FALSE, and as such use the
+# independent normal-Wishart prior you may change
+# the scale matrix 'S_' and degrees of freedom 'v_'
+# as you please after running priors()
+
+#bvar_obj$priors$S_ <- (50-4-1)*diag(4)
+#bvar_obj$priors$v_  <- 50
+######################################################
 
 p <- bvar_obj$setup$p
 m <- bvar_obj$setup$m
@@ -131,20 +140,20 @@ bvar_obj$predict$H <- 20
 bvar_obj$predict$x_pred <- cbind(rep(1, 20), (nrow(yt)+1):(nrow(yt)+20))
 
 bvar_obj <- fit(bvar_obj,
-                iter = 1000,
-                warmup = 250)
+                iter = 5000,
+                warmup = 2500)
 
 round(bvar_obj$fit$Algorithm2$Gamma_posterior_mean,2)
 #>        [,1]  [,2]  [,3]  [,4]
 #>  [1,]  1.16  0.08  0.01 -0.10
 #>  [2,]  0.09  1.03 -0.13 -0.04
 #>  [3,] -0.03 -0.05  0.87  0.00
-#>  [4,] -0.03  0.08  0.02  0.97
+#>  [4,] -0.04  0.08  0.02  0.98
 #>  [5,] -0.18 -0.02  0.07  0.04
 #>  [6,]  0.00 -0.07 -0.04  0.00
 #>  [7,]  0.01 -0.02 -0.05  0.01
-#>  [8,]  0.05  0.11 -0.07 -0.03
-#>  [9,] -0.02  0.00  0.03  0.05
+#>  [8,]  0.05  0.11 -0.07 -0.04
+#>  [9,] -0.03  0.00  0.03  0.05
 #> [10,]  0.00 -0.03  0.01  0.00
 #> [11,]  0.01  0.00  0.03  0.00
 #> [12,]  0.04  0.05 -0.02 -0.01
@@ -152,8 +161,8 @@ round(bvar_obj$fit$Algorithm2$Gamma_posterior_mean,2)
 #> [14,]  0.00 -0.02  0.00  0.00
 #> [15,]  0.01  0.00  0.05  0.00
 #> [16,]  0.02  0.02  0.00 -0.02
-#> [17,] -0.30  2.32  0.17  2.92
-#> [18,]  0.00  0.05  0.04  0.00
+#> [17,]  0.10  2.52  0.27  2.89
+#> [18,]  0.00  0.06  0.04  0.00
 round(bvar_obj$fit$Algorithm2$Psi_posterior_mean,2)
 #>       [,1]  [,2]  [,3]  [,4]
 #> [1,]  0.19  0.01 -0.10 -0.12
@@ -236,10 +245,11 @@ $$
 $$
 
 Here $\pi (\Gamma_d)$ is based on the Minnesota prior with overall
-tightness $\pi_1$, cross-equation tightness $\pi_2$ and lag decay rate
-$\pi_3$. Note that $\pi (\Lambda)$ is the core of the steady-state
-model, where we specify our prior beliefs about the location and scale
-of the steady-state parameters. For $\Psi$ we use Jeffreys’ prior
+tightness $\pi_1$, relative (cross-equation) tightness $\pi_2$ and lag
+decay rate $\pi_3$. Note that $\pi (\Lambda)$ is the core of the
+steady-state model, where we specify our prior beliefs about the
+location and scale of the steady-state parameters. For $\Psi$ we use
+Jeffreys’ prior
 
 $$
 p(\Psi) \propto\left|\Psi \right|^{-(m+1)/2}
@@ -250,7 +260,8 @@ $\Psi \sim iW(\underline{S}, \underline{v})$, for $\Psi$ can be used. An
 uninformative inverse Wishart prior can again be specified by setting
 $\underline{S}=(\underline{v}-k-1)\hat{\Psi}$ where $\hat{\Psi}$ is the
 least squares estimate from the VAR($p$) (including the constant and
-dummy/trend variable if applicable), and $\underline{v}=m+2$.
+dummy/trend variable if applicable), and $\underline{v}=m+2$. Again, the
+scale matrix and degrees of freedom may be changed to the users desires.
 
 ``` r
 rm(list = ls())
@@ -362,51 +373,51 @@ bvar_obj <- fit(bvar_obj,
 
 round(bvar_obj$fit$SteadyState$Gamma_d_posterior_mean,2)
 #>        [,1]  [,2]  [,3]  [,4]  [,5]  [,6]  [,7]
-#>  [1,]  0.18  0.02 -0.01  0.12  0.06 -0.12  0.00
-#>  [2,] -0.01  0.31  0.25  0.13 -0.05  0.00  0.00
-#>  [3,] -0.01  0.04  0.92 -0.04  0.05  0.04  0.00
-#>  [4,]  0.00  0.00  0.00  0.24 -0.07 -0.10  0.00
-#>  [5,]  0.00  0.00  0.00  0.00  0.07  0.07  0.00
+#>  [1,]  0.18  0.02 -0.02  0.11  0.08 -0.12  0.00
+#>  [2,] -0.01  0.32  0.25  0.13 -0.07  0.02  0.00
+#>  [3,] -0.01  0.04  0.93 -0.04  0.06  0.04  0.00
+#>  [4,]  0.00  0.00  0.00  0.23 -0.08 -0.09  0.00
+#>  [5,]  0.00  0.00  0.00  0.00  0.07  0.05  0.00
 #>  [6,]  0.00  0.00  0.00  0.00  0.02  0.76  0.00
-#>  [7,]  0.00  0.00  0.00  1.27  3.89  0.88  0.94
-#>  [8,]  0.03 -0.01  0.09  0.03 -0.01  0.10  0.00
-#>  [9,]  0.00  0.03  0.04  0.01 -0.04 -0.15  0.00
-#> [10,] -0.02 -0.01 -0.01  0.00  0.04  0.07  0.00
-#> [11,]  0.00  0.00  0.00  0.11 -0.01  0.13  0.00
-#> [12,]  0.00  0.00  0.00  0.01 -0.05 -0.04  0.00
-#> [13,]  0.00  0.00  0.00 -0.01  0.01  0.04  0.00
-#> [14,]  0.00  0.00  0.00  0.50 -0.43  0.10 -0.05
-#> [15,]  0.00 -0.01  0.00  0.02 -0.01  0.00  0.00
-#> [16,] -0.02  0.06  0.01 -0.01  0.08  0.03  0.00
-#> [17,]  0.00  0.00  0.03  0.00  0.00  0.03  0.00
-#> [18,]  0.00  0.00  0.00  0.07  0.01 -0.02  0.00
+#>  [7,]  0.00  0.00  0.00  1.28  3.85  0.55  0.93
+#>  [8,]  0.03 -0.01  0.09  0.02 -0.01  0.10  0.00
+#>  [9,]  0.01  0.03  0.02  0.00 -0.02 -0.15  0.00
+#> [10,] -0.02 -0.01  0.00  0.00  0.04  0.08  0.00
+#> [11,]  0.00  0.00  0.00  0.11 -0.01  0.15  0.00
+#> [12,]  0.00  0.00  0.00  0.01 -0.04 -0.04  0.00
+#> [13,]  0.00  0.00  0.00 -0.01  0.01  0.03  0.00
+#> [14,]  0.00  0.00  0.00  0.55 -0.35  0.44 -0.03
+#> [15,]  0.01 -0.02  0.00  0.01 -0.02  0.00  0.00
+#> [16,] -0.02  0.06 -0.02  0.00  0.09  0.01  0.00
+#> [17,]  0.00  0.00  0.02  0.00  0.01  0.02  0.00
+#> [18,]  0.00  0.00  0.00  0.06  0.01 -0.02  0.00
 #> [19,]  0.00  0.00  0.00  0.00  0.02 -0.02  0.00
-#> [20,]  0.00  0.00  0.00  0.01  0.00  0.02  0.00
-#> [21,]  0.00  0.00  0.00 -0.17 -0.06 -0.60  0.01
-#> [22,]  0.03 -0.01  0.00  0.00  0.02  0.02  0.00
-#> [23,]  0.00  0.16 -0.03  0.00  0.01  0.02  0.00
-#> [24,]  0.00  0.00 -0.02  0.00  0.00  0.02  0.00
+#> [20,]  0.00  0.00  0.00  0.01  0.00  0.01  0.00
+#> [21,]  0.00  0.00  0.00 -0.17  0.00 -0.70  0.00
+#> [22,]  0.03 -0.01  0.00  0.00  0.03  0.02  0.00
+#> [23,] -0.01  0.16 -0.04  0.00  0.01  0.01  0.00
+#> [24,]  0.00  0.00 -0.02  0.00  0.00  0.03  0.00
 #> [25,]  0.00  0.00  0.00 -0.08  0.01  0.03  0.00
-#> [26,]  0.00  0.00  0.00  0.00  0.06 -0.01  0.00
-#> [27,]  0.00  0.00  0.00  0.00 -0.01 -0.01  0.00
-#> [28,]  0.00  0.00  0.00 -0.15 -0.05 -0.11 -0.01
+#> [26,]  0.00  0.00  0.00  0.00  0.05 -0.01  0.00
+#> [27,]  0.00  0.00  0.00  0.00 -0.01  0.00  0.00
+#> [28,]  0.00  0.00  0.00 -0.14 -0.05 -0.11 -0.01
 round(bvar_obj$fit$SteadyState$Lambda_posterior_mean,2)
 #>      [,1]  [,2]
-#> [1,] 0.58  0.08
-#> [2,] 0.50  0.46
-#> [3,] 4.93  2.03
-#> [4,] 0.57 -0.02
-#> [5,] 0.49  1.15
-#> [6,] 4.28  4.40
+#> [1,] 0.58  0.07
+#> [2,] 0.50  0.47
+#> [3,] 4.96  2.01
+#> [4,] 0.58 -0.03
+#> [5,] 0.49  1.14
+#> [6,] 4.30  4.47
 #> [7,] 3.92 -0.10
 round(bvar_obj$fit$SteadyState$Psi_posterior_mean,2)
 #>       [,1]  [,2] [,3]  [,4]  [,5]  [,6]  [,7]
-#> [1,]  0.15 -0.01 0.01  0.07 -0.01  0.00  0.00
-#> [2,] -0.01  0.09 0.05  0.01  0.13  0.04  0.00
-#> [3,]  0.01  0.05 0.52  0.01  0.18  0.11  0.00
+#> [1,]  0.15 -0.01 0.02  0.07  0.00  0.00  0.00
+#> [2,] -0.01  0.09 0.05  0.01  0.13  0.05  0.00
+#> [3,]  0.02  0.05 0.51  0.01  0.17  0.11  0.00
 #> [4,]  0.07  0.01 0.01  0.20 -0.05 -0.02  0.00
-#> [5,] -0.01  0.13 0.18 -0.05  0.61  0.10  0.00
-#> [6,]  0.00  0.04 0.11 -0.02  0.10  1.57 -0.01
+#> [5,]  0.00  0.13 0.17 -0.05  0.59  0.13  0.00
+#> [6,]  0.00  0.05 0.11 -0.02  0.13  1.55 -0.01
 #> [7,]  0.00  0.00 0.00  0.00  0.00 -0.01  0.00
 
 fcst <- forecast(bvar_obj,
