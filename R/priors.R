@@ -87,6 +87,9 @@ priors<- function(x,
     S_ = (v_-m-1)*setup$Psi_OLS
     priors$S_ <- S_
     priors$v_ <- v_
+  } else {
+    priors$S_ <- NULL
+    priors$v_ <- NULL
   }
   
   if (steadystate) {
