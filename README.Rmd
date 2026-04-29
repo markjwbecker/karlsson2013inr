@@ -101,74 +101,48 @@ data("Canada", package="vars")
 yt <- Canada
 plot.ts(yt)
 
-bvar_obj1 <- bvar(data = yt)
-bvar_obj1 <- setup(bvar_obj1,
-                   p=4,
-                   deterministic = "constant_and_trend")
+bvar_obj <- bvar(data = yt)
+bvar_obj <- setup(bvar_obj,
+                  p=4,
+                  deterministic = "constant_and_trend")
 
-bvar_obj2 <- bvar(data = yt)
-bvar_obj2 <- setup(bvar_obj2,
-                   p=4,
-                   deterministic = "constant_and_trend")
 
-####
+######################################################
 # If 'Jeffrey=TRUE'  -> normal diffuse
 # If 'Jeffrey=FALSE' -> independent normal-Wishart
-####
+######################################################
 
-bvar_obj1 <- priors(bvar_obj1,
-                    pi_1=0.2,
-                    pi_2=0.5,
-                    pi_3=1.0,
-                    pi_4=100,
-                    first_own_lag_prior_mean=c(1,1,1,1), #fol_pm = first own lag prior means
-                    Jeffrey=TRUE)
+bvar_obj <- priors(bvar_obj,
+                   pi_1=0.2,
+                   pi_2=0.5,
+                   pi_3=1.0,
+                   pi_4=100,
+                   first_own_lag_prior_mean=c(1,1,1,1),
+                   Jeffrey=TRUE)
 
-bvar_obj2 <- priors(bvar_obj2,
-                    pi_1=0.2,
-                    pi_2=0.5,
-                    pi_3=1.0,
-                    pi_4=100,
-                    first_own_lag_prior_mean=c(1,1,1,1),
-                    Jeffrey=FALSE)
 
-p <- bvar_obj1$setup$p
-m <- bvar_obj1$setup$m
-d <- bvar_obj1$setup$d
+p <- bvar_obj$setup$p
+m <- bvar_obj$setup$m
+d <- bvar_obj$setup$d
 restriction_matrix <- matrix(1, (m*p)+d, m)
-
 restriction_matrix[m*p+2, 4] <- 0 #no trend term for unemployment
 
-bvar_obj1 <- restrict_Gamma(bvar_obj1, restriction_matrix)
-bvar_obj2 <- restrict_Gamma(bvar_obj2, restriction_matrix)
+bvar_obj <- restrict_Gamma(bvar_obj, restriction_matrix)
 
 
-bvar_obj1$predict$H <- 20
-bvar_obj1$predict$x_pred <- cbind(rep(1, 20), (nrow(yt)+1):(nrow(yt)+20))
-bvar_obj2$predict$H <- 20
-bvar_obj2$predict$x_pred <- cbind(rep(1, 20), (nrow(yt)+1):(nrow(yt)+20))
+bvar_obj$predict$H <- 20
+bvar_obj$predict$x_pred <- cbind(rep(1, 20), (nrow(yt)+1):(nrow(yt)+20))
 
-bvar_obj1 <- fit(bvar_obj1,
-                iter = 10000,
-                warmup = 2500)
+bvar_obj <- fit(bvar_obj,
+                iter = 1000,
+                warmup = 250)
 
-bvar_obj2 <- fit(bvar_obj2,
-                iter = 10000,
-                warmup = 2500)
+round(bvar_obj$fit$Algorithm2$Gamma_posterior_mean,2)
+round(bvar_obj$fit$Algorithm2$Psi_posterior_mean,2)
 
-round(bvar_obj1$fit$Algorithm2$Gamma_posterior_mean,2)
-round(bvar_obj2$fit$Algorithm2$Gamma_posterior_mean,2)
 
-round(bvar_obj1$fit$Algorithm2$Psi_posterior_mean,2)
-round(bvar_obj2$fit$Algorithm2$Psi_posterior_mean,2)
-
-par(mfcol = c(4, 2))
-fcst1 <- forecast(bvar_obj1,
-                 ci = 0.95,
-                 fcst_type = "median",
-                 show_all = TRUE)
-
-fcst2 <- forecast(bvar_obj2,
+par(mfcol = c(4, 1))
+fcst <- forecast(bvar_obj,
                  ci = 0.95,
                  fcst_type = "median",
                  show_all = TRUE)
@@ -354,8 +328,8 @@ bvar_obj$predict$H <- 12
 bvar_obj$predict$x_pred <- cbind(rep(1, 12), 0)
 
 bvar_obj <- fit(bvar_obj,
-                iter = 5000,
-                warmup = 2500)
+                iter = 500,
+                warmup = 250)
 
 round(bvar_obj$fit$SteadyState$Gamma_d_posterior_mean,2)
 round(bvar_obj$fit$SteadyState$Lambda_posterior_mean,2)
